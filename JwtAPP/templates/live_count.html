@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Post Count</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    h3 {
+      font-size: 1.5rem;
+      margin-top: 0;
+      color: #E8E8E8;
+    }
+    .highlight {
+      color: #FFD700;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1> Live Post Updates</h1>
+  <h3>Total posts made by <span id="email" class="highlight">—</span>: 
+      <span id="count" class="highlight">{{ count }}</span>
+  </h3>
+
+  <script>
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/posts/");
+    const countElement = document.getElementById("count");
+    const emailElement = document.getElementById("email");
+
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      countElement.textContent = data.count;
+      emailElement.textContent = data.email;
+    };
+  </script>
+</body>
+</html>
